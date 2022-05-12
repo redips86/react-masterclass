@@ -19,6 +19,10 @@ const animation = keyframes`
   }
 `;
 
+const Emoji = styled.span`
+  font-size: 36px;
+`
+
 const Box = styled.div`
   height: 200px;
   width: 200px;
@@ -28,25 +32,19 @@ const Box = styled.div`
   align-items: center;
   justify-content: center;
 
-  span {
-    font-size: 36px;
-    // span:hover 랑 동일
-    &:hover {
-      font-size: 80px;
-    }
-    // span:active 랑 동일
-    &:active{
-      opacity: 0;
-    }
+  ${Emoji}:hover {
+    font-size: 80px;
   }
+  
 `;
 
 function App() {
     return (
         <Wrapper>
             <Box>
-                <span>😘</span>
+                <Emoji as={"p"}>😘</Emoji>
             </Box>
+            <Emoji as={"p"}>👀</Emoji>
         </Wrapper>
     );
 }
