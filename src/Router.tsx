@@ -9,8 +9,8 @@ const Router = () => {
         <BrowserRouter>
             <Routes>
                 <Route path={"/:coinId"} element={<Coin/>}>
-                    <Route path={"chart"} element={<Price/>}/>
-                    <Route path={"price"} element={<Chart/>}/>
+                    <Route path={"chart"} element={<Chart/>}/>
+                    <Route path={"price"} element={<Price/>}/>
                 </Route>
                 <Route path={"/"} element={<Coins/>}/>
             </Routes>
