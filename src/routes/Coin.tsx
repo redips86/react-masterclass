@@ -1,6 +1,6 @@
 import {useLocation, useParams} from "react-router-dom";
 import styled from "styled-components";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 const Loader = styled.span`
   text-align: center;
@@ -37,15 +37,25 @@ interface LocationParams {
 function Coin() {
     const {coinId} = useParams<keyof RouteParams>() as RouteParams;
     const [loading, setLoading] = useState(true);
+    const [info, setInfo] = useState({});
+    const [price, setPrice] = useState({});
     const {state} = useLocation() as LocationParams;
-    console.log(state);
+
+    useEffect(() => {
+        (async () => {
+            const infoData = await (await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)).json();
+            setInfo(infoData);
+            const priceData = await (await fetch(`https://api.coinpaprika.com/v1/tickers/${coinId}`)).json();
+            setPrice(priceData);
+        })();
+    }, [])
 
     return (
         <Container>
             <Header>
                 <Title>{state?.name || "Loading"}</Title>
             </Header>
-            {loading ? <Loader>Loading...</Loader> : <h2>Coin : {coinId} </h2>}
+            {loading ? <Loader>Loading...</Loader> : <span>{/*{info.hello}*/}</span>}
         </Container>
     );
 };
