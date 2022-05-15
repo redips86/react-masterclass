@@ -1,18 +1,14 @@
-import {BrowserRouter, Route, Switch} from "react-router-dom";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Coins from "./routes/Coins";
 import Coin from "./routes/Coin";
 
 const Router = () => {
     return (
         <BrowserRouter>
-            <Switch>
-                <Route path={"/:coinId"}>
-                    <Coin></Coin>
-                </Route>
-                <Route path={"/"}>
-                    <Coins></Coins>
-                </Route>
-            </Switch>
+            <Routes>
+                <Route path={"/:coinId"} element={<Coin/>}/>
+                <Route path={"/"} element={<Coins/>}/>
+            </Routes>
         </BrowserRouter>
     )
 }
