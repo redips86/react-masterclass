@@ -1,5 +1,6 @@
 import Router from "./Router";
 import {createGlobalStyle} from "styled-components";
+import {ReactQueryDevtools} from "react-query/devtools";
 
 // https://github.com/zacanger/styled-reset/blob/master/src/index.ts
 // 브라우저 태그 리셋
@@ -82,6 +83,7 @@ function App() {
         <>
             <GlobalStyle/>
             <Router/>
+            <ReactQueryDevtools></ReactQueryDevtools>
         </>
     );
 }
