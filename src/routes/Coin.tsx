@@ -195,7 +195,7 @@ function Coin() {
                     </Tabs>
 
 
-                    <Outlet/>
+                    <Outlet context={coinId}/>
                 </>
             )}
         </Container>
