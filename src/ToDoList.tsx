@@ -1,22 +1,43 @@
 import {useForm} from "react-hook-form";
 
+interface IForm {
+    email: string,
+    username: string,
+    password: string,
+    passwordCheck: string,
+}
+
 function ToDoList() {
-    const {register, handleSubmit, formState} = useForm()
-    const onValid = (data: any) => {
+    const {register, handleSubmit, formState: {errors}} = useForm<IForm>({
+        defaultValues: {
+            email: "@naver.com",
+        }
+    })
+    const onValid = (data: IForm) => {
         console.log(data);
     };
-    console.log(formState.errors);
 
     return (
         <div>
             <form style={{display: "flex", flexDirection: "column"}} action="" onSubmit={handleSubmit(onValid)}>
-                <input {...register("email", {required: "이메일이 필요합니다.", minLength: {value: 5, message: "너무 짧습니다."}})}
+                <input {...register("email", {
+                    required: "이메일이 필요합니다.",
+                    pattern: {
+                        value: /^[A-Za-z0-9._%+-]+@naver.com$/,
+                        message: "이메일 양식에 적합하지 않습니다.",
+                    }
+                })}
                        type="text" placeholder={"email"}/>
-                <input {...register("username", {required: true})} type="text" placeholder={"username"}/>
-                <input {...register("password", {required: true})} type="text" placeholder={"password"}/>
-                <input {...register("passwordCheck", {required: true})} type="text" placeholder={"passwordCheck"}/>
+                <span> {errors?.email?.message} </span>
+                <input {...register("username", {required: "필수값"})} type="text" placeholder={"username"}/>
+                <span> {errors?.username?.message} </span>
+                <input {...register("password", {required: "필수값"})} type="text" placeholder={"password"}/>
+                <span> {errors?.password?.message} </span>
+                <input {...register("passwordCheck", {required: "필수값"})} type="text" placeholder={"passwordCheck"}/>
+                <span> {errors?.passwordCheck?.message} </span>
                 <button>Add</button>
             </form>
+
         </div>
     );
 }
