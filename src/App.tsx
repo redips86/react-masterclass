@@ -1,9 +1,5 @@
-import Router from "./Router";
-import {createGlobalStyle, ThemeProvider} from "styled-components";
-import {ReactQueryDevtools} from "react-query/devtools";
-import {darkTheme, lightTheme} from "./theme";
-import {useRecoilValue} from "recoil";
-import {isDarkAtom} from "./atoms";
+import {createGlobalStyle} from "styled-components";
+import ToDoList from "./ToDoList";
 
 // https://github.com/zacanger/styled-reset/blob/master/src/index.ts
 // 브라우저 태그 리셋
@@ -82,14 +78,11 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 function App() {
-    const isDark = useRecoilValue(isDarkAtom);
+
     return (
         <>
-            <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
-                <GlobalStyle/>
-                <Router/>
-                <ReactQueryDevtools></ReactQueryDevtools>
-            </ThemeProvider>
+            <GlobalStyle/>
+            <ToDoList/>
         </>
     );
 }
