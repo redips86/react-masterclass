@@ -4,15 +4,16 @@ import {fetchCoinHistory} from "../api/api";
 import ApexChart from "react-apexcharts";
 
 export interface IHistorical {
-    timeOpen: Date;
-    timeClose: Date;
+    time_open: Date;
+    time_close: Date;
     open: number;
     high: number;
     low: number;
     close: number;
     volume: number;
-    marketCap: number;
+    market_cap: number;
 }
+
 
 
 function Chart() {
@@ -42,15 +43,27 @@ function Chart() {
                     xaxis: {
                         axisBorder: {show: false},
                         axisTicks: {show: false},
-                        labels: {show: false}
+                        labels: {show: false, datetimeFormatter: {month: "mmm 'yy'"}},
+                        type: "datetime",
+                        categories: data?.map((price) => price.time_close),
                     },
                     stroke: {
                         curve: "smooth",
                         width: 2
                     },
-                }}
-                           type="line" series={[{name: "Price", data: data?.map(price => price.close) as number[],},
-                ]}></ApexChart>
+                    fill: {
+                        type: "gradient",
+                        gradient: {gradientToColors: ["#0be881"], stops: [0, 100]}
+                    },
+                    colors: ["0fbcf9"],
+                    tooltip: {
+                        y: {
+                            formatter: (value) => `$${value.toFixed(2)}`
+                        }
+                    }
+                }} type="line"
+                           series={[{name: "Price", data: data?.map(price => price.close) as number[],},
+                           ]}></ApexChart>
         }</div>
     );
 }
