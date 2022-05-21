@@ -14,8 +14,12 @@ export interface IHistorical {
     market_cap: number;
 }
 
+interface IThemeMode {
+    isDark: boolean;
+}
 
-function Chart() {
+
+function Chart({isDark}: IThemeMode) {
     const coinId = useOutletContext<string>();
     const {isLoading, data} = useQuery<IHistorical[]>(["ohlcv", coinId], () => fetchCoinHistory(coinId),
         {refetchInterval: 10000}
@@ -26,7 +30,7 @@ function Chart() {
             isLoading
                 ? "Loading chart..." :
                 <ApexChart options={{
-                    theme: {mode: 'dark',},
+                    theme: {mode: isDark ? 'dark' : 'light',},
                     chart: {
                         height: 300,
                         width: 500,
