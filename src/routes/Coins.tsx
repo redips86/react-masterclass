@@ -68,10 +68,9 @@ interface ICoin {
 }
 
 interface IRouterProps {
-    toggleDark: () => void;
 }
 
-function Coins({toggleDark}: IRouterProps) {
+function Coins({}: IRouterProps) {
     const {isLoading, data} = useQuery<ICoin[]>("allCoins", fetchCoins);
 
     return (
@@ -84,7 +83,7 @@ function Coins({toggleDark}: IRouterProps) {
 
             <Header>
                 <Title>Coins</Title>
-                <button onClick={toggleDark}>Toggle Mode</button>
+                <button>Toggle Mode</button>
             </Header>
             {isLoading ? <Loader>"Loading..."</Loader> :
                 <CoinsList>
