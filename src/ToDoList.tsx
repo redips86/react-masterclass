@@ -5,15 +5,20 @@ interface IForm {
     username: string,
     password: string,
     passwordCheck: string,
+    extraError?: string;
 }
 
 function ToDoList() {
-    const {register, handleSubmit, formState: {errors}} = useForm<IForm>({
+    const {register, handleSubmit, formState: {errors}, setError} = useForm<IForm>({
         defaultValues: {
             email: "@naver.com",
         }
     })
     const onValid = (data: IForm) => {
+        if (data.password !== data.passwordCheck) {
+            setError("passwordCheck", {message: "비밀번호가 같지 않습니다."}, {shouldFocus: true})
+        }
+        // setError("extraError", {message: "Server offline..."})
         console.log(data);
     };
 
@@ -29,13 +34,19 @@ function ToDoList() {
                 })}
                        type="text" placeholder={"email"}/>
                 <span> {errors?.email?.message} </span>
-                <input {...register("username", {required: "필수값"})} type="text" placeholder={"username"}/>
+                <input {...register("username", {
+                    required: "필수값", validate: {
+                        noNico: (value) => value.includes("nico") ? "no nicos allowed" : true,
+                        noNick: (value) => value.includes("nick") ? "no nicks allowed" : true,
+                    }
+                })} type="text" placeholder={"username"}/>
                 <span> {errors?.username?.message} </span>
                 <input {...register("password", {required: "필수값"})} type="text" placeholder={"password"}/>
                 <span> {errors?.password?.message} </span>
                 <input {...register("passwordCheck", {required: "필수값"})} type="text" placeholder={"passwordCheck"}/>
                 <span> {errors?.passwordCheck?.message} </span>
                 <button>Add</button>
+                <span> {errors?.extraError?.message} </span>
             </form>
 
         </div>
