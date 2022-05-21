@@ -2,6 +2,7 @@ import styled from "styled-components";
 import {Link} from "react-router-dom";
 import {useQuery} from "react-query";
 import {fetchCoins} from "../api/api";
+import {Helmet, HelmetProvider} from "react-helmet-async";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -50,9 +51,11 @@ const Img = styled.img`
   margin-right: 10px;
 `;
 
-export const Title = styled.h1`
-  color: ${props => props.theme.accentColor}
+const Title = styled.h1`
+  font-size: 48px;
+  color: ${(props) => props.theme.accentColor};
 `;
+
 
 interface ICoin {
     id: string,
@@ -69,6 +72,12 @@ function Coins() {
 
     return (
         <Container>
+            <HelmetProvider>
+                <Helmet>
+                    <title>Coins</title>
+                </Helmet>
+            </HelmetProvider>
+
             <Header>
                 <Title>Coins</Title>
             </Header>
