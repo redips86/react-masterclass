@@ -1,5 +1,5 @@
 import {createGlobalStyle} from "styled-components";
-import ToDoList from "./ToDoList";
+import ToDoList from "./components/ToDoList";
 
 // https://github.com/zacanger/styled-reset/blob/master/src/index.ts
 // 브라우저 태그 리셋
