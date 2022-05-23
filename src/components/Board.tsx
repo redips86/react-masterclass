@@ -1,7 +1,8 @@
 import DragabbleCard from "./DragabbleCard";
 import {Droppable} from "react-beautiful-dnd";
 import styled from "styled-components";
-import {useRef} from "react";
+import {useForm} from "react-hook-form";
+import {ITodo} from "../atoms";
 
 const Wrapper = styled.div`
   min-height: 200px;
@@ -33,26 +34,34 @@ const Area = styled.div<IAreaProps>`
   padding: 20px;
 `;
 
+const Form = styled.div`
+  width: 100%;
+`;
+
 interface IBoardProps {
-    toDos: string[];
+    toDos: ITodo[];
     boardId: string;
 }
 
+interface IForm {
+    toDo: string;
+}
 
 function Board({toDos, boardId}: IBoardProps) {
-    const inputRef = useRef<HTMLInputElement>(null);
-    const onClick = () => {
-        inputRef.current?.focus();
-        setTimeout(() => {
-            inputRef.current?.blur()
-        }, 1000);
+    const {register, setValue, handleSubmit} = useForm<IForm>();
+    const onValid = (data: IForm) => {
+        console.log(data);
+        setValue("toDo", "");
     };
 
     return (
         <Wrapper>
             <Title>{boardId}</Title>
-            <input type="text" placeholder={"grab me"} ref={inputRef}/>
-            <button onClick={onClick}>click me</button>
+            <Form onSubmit={handleSubmit(onValid)}>
+                <input {...register("toDo", {required: true})} type="text" placeholder={`Add task on ${boardId}`}/>
+            </Form>
+
+
             <Droppable droppableId={boardId}>
                 {(provided, snapshot) =>
                     <Area isDraggingOver={snapshot.isDraggingOver}
@@ -60,7 +69,7 @@ function Board({toDos, boardId}: IBoardProps) {
                           ref={provided.innerRef}
                           {...provided.droppableProps}>
                         {toDos.map((toDo, index) => (
-                            <DragabbleCard key={toDo} index={index} toDo={toDo}/>
+                            <DragabbleCard key={toDo.id} index={index} toDoId={toDo.id} toDoText={toDo.text}/>
                         ))}
                         {provided.placeholder}
                     </Area>}
