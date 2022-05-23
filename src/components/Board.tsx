@@ -2,7 +2,8 @@ import DragabbleCard from "./DragabbleCard";
 import {Droppable} from "react-beautiful-dnd";
 import styled from "styled-components";
 import {useForm} from "react-hook-form";
-import {ITodo} from "../atoms";
+import {ITodo, toDoState} from "../atoms";
+import {useSetRecoilState} from "recoil";
 
 const Wrapper = styled.div`
   min-height: 200px;
@@ -34,7 +35,7 @@ const Area = styled.div<IAreaProps>`
   padding: 20px;
 `;
 
-const Form = styled.div`
+const Form = styled.form`
   width: 100%;
 `;
 
@@ -48,9 +49,20 @@ interface IForm {
 }
 
 function Board({toDos, boardId}: IBoardProps) {
+    const setToDos = useSetRecoilState(toDoState);
     const {register, setValue, handleSubmit} = useForm<IForm>();
-    const onValid = (data: IForm) => {
-        console.log(data);
+    const onValid = ({toDo}: IForm) => {
+        const newToDo = {
+            id: Date.now(),
+            text: toDo,
+        }
+        setToDos(currVal => {
+            console.log(currVal);
+            return {
+                ...currVal,
+                [boardId]: [newToDo, ...currVal[boardId]]
+            }
+        });
         setValue("toDo", "");
     };
 
@@ -61,18 +73,24 @@ function Board({toDos, boardId}: IBoardProps) {
                 <input {...register("toDo", {required: true})} type="text" placeholder={`Add task on ${boardId}`}/>
             </Form>
 
-
             <Droppable droppableId={boardId}>
-                {(provided, snapshot) =>
-                    <Area isDraggingOver={snapshot.isDraggingOver}
-                          isDraggingFromThis={Boolean(snapshot.draggingFromThisWith)}
-                          ref={provided.innerRef}
-                          {...provided.droppableProps}>
+                {(provided, snapshot) => (
+                    <Area
+                        isDraggingOver={snapshot.isDraggingOver}
+                        isDraggingFromThis={Boolean(snapshot.draggingFromThisWith)}
+                        ref={provided.innerRef}
+                        {...provided.droppableProps}
+                    >
                         {toDos.map((toDo, index) => (
-                            <DragabbleCard key={toDo.id} index={index} toDoId={toDo.id} toDoText={toDo.text}/>
+                            <DragabbleCard
+                                key={toDo.id}
+                                index={index}
+                                toDoId={toDo.id}
+                                toDoText={toDo.text}/>
                         ))}
                         {provided.placeholder}
-                    </Area>}
+                    </Area>
+                )}
             </Droppable>
         </Wrapper>
     );
