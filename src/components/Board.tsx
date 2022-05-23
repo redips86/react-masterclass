@@ -28,12 +28,12 @@ function Board({toDos, boardId}: IBoardProps) {
             <Title>{boardId}</Title>
             <Droppable droppableId={boardId}>
                 {(provided) =>
-                    <Wrapper ref={provided.innerRef} {...provided.droppableProps}>
+                    <div style={{backgroundColor: "red"}} ref={provided.innerRef} {...provided.droppableProps}>
                         {toDos.map((toDo, index) => (
                             <DragabbleCard key={toDo} index={index} toDo={toDo}/>
                         ))}
                         {provided.placeholder}
-                    </Wrapper>}
+                    </div>}
             </Droppable>
         </Wrapper>
     );
