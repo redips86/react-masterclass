@@ -16,7 +16,7 @@ const Wrapper = styled.div`
 const Boards = styled.div`
   display: grid;
   width: 100%;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(1, 1fr);
 `;
 
 const Board = styled.div`
@@ -38,18 +38,35 @@ const Card = styled.div`
 function App() {
     const [toDos, setToDos] = useRecoilState(toDoState);
 
-    const onDragEnd = ({destination, source}: DropResult) => {
+    const onDragEnd = ({draggableId, destination, source}: DropResult) => {
+        if (!destination) return;
+        setToDos(currVal => {
+            const toDosCopy = [...currVal];
+            // 1) Delete item on source.index
+            console.log("Delete item on", source.index);
+            console.log(toDosCopy);
 
+            toDosCopy.splice(source.index, 1);
+
+            console.log("Delete item");
+            console.log(toDosCopy);
+
+            // 2) Put back the item on the destination.index
+            console.log("Put back", draggableId, "on", destination.index)
+            toDosCopy.splice(destination?.index as number, 0, draggableId);
+            console.log(toDosCopy)
+            return toDosCopy;
+        })
     };
     return (
         <DragDropContext onDragEnd={onDragEnd}>
             <Wrapper>
                 <Boards>
                     <Droppable droppableId={"droppable"}>
-                        {(provied) =>
-                            <Board ref={provied.innerRef} {...provied.droppableProps}>
+                        {(provided) =>
+                            <Board ref={provided.innerRef} {...provided.droppableProps}>
                                 {toDos.map((toDo, index) => (
-                                    <Draggable key={index} draggableId={toDo} index={index}>
+                                    <Draggable key={toDo} draggableId={toDo} index={index}>
                                         {(provided) =>
                                             <Card
                                                 ref={provided.innerRef}
@@ -61,7 +78,7 @@ function App() {
                                         }
                                     </Draggable>
                                 ))}
-                                {provied.placeholder}
+                                {provided.placeholder}
                             </Board>}
                     </Droppable>
                 </Boards>
