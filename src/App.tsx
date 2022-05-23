@@ -6,13 +6,18 @@ function App() {
     return (
         <DragDropContext onDragEnd={onDragEnd}>
             <div>
-                <Droppable droppableId={"one"}>
-                    {() => <ul>
-                        <Draggable draggableId={"one"} index={0}>
-                            {() => <li>One</li>}
-                        </Draggable>
-                        <Draggable draggableId={"two"} index={1}>
-                            {() => <li>Two</li>}
+                <Droppable droppableId={"droppable"}>
+                    {(provied) => <ul ref={provied.innerRef} {...provied.droppableProps}>
+                        <Draggable draggableId={"first"} index={0}>
+                            {(provided) =>
+                                <li
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                >
+                                    <span {...provided.dragHandleProps}>🥳</span>
+                                    One
+                                </li>
+                            }
                         </Draggable>
                     </ul>}
                 </Droppable>
