@@ -11,7 +11,6 @@ const root = ReactDOM.createRoot(document.getElementById('root') as Element);
 // 브라우저 태그 리셋
 const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
-
   html, body, div, span, applet, object, iframe,
   h1, h2, h3, h4, h5, h6, p, blockquote, pre,
   a, abbr, acronym, address, big, cite, code,
@@ -50,7 +49,6 @@ const GlobalStyle = createGlobalStyle`
   blockquote, q {
     quotes: none;
   }
-
   blockquote:before, blockquote:after,
   q:before, q:after {
     content: '';
@@ -71,7 +69,7 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Source Sans Pro', sans-serif;
     color: black;
     line-height: 1.2;
-    background: linear-gradient(135deg, #e09, #d0e);
+
   }
 
   a {
