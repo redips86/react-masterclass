@@ -12,6 +12,7 @@ const root = ReactDOM.createRoot(document.getElementById('root') as Element);
 // 브라우저 태그 리셋
 const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
+
   html, body, div, span, applet, object, iframe,
   h1, h2, h3, h4, h5, h6, p, blockquote, pre,
   a, abbr, acronym, address, big, cite, code,
@@ -32,24 +33,30 @@ const GlobalStyle = createGlobalStyle`
     font: inherit;
     vertical-align: baseline;
   }
+
   /* HTML5 display-role reset for older browsers */
   article, aside, details, figcaption, figure,
   footer, header, hgroup, main, menu, nav, section {
     display: block;
   }
+
   /* HTML5 hidden-attribute fix for newer browsers */
   *[hidden] {
     display: none;
   }
+
   body {
     line-height: 1;
   }
+
   menu, ol, ul {
     list-style: none;
   }
+
   blockquote, q {
     quotes: none;
   }
+
   blockquote:before, blockquote:after,
   q:before, q:after {
     content: '';
@@ -68,10 +75,9 @@ const GlobalStyle = createGlobalStyle`
   body {
     font-weight: 300;
     font-family: 'Source Sans Pro', sans-serif;
-    color: ${props => props.theme.white.darker};
+    color: ${(props) => props.theme.white.darker};
     line-height: 1.2;
     background-color: black;
-
   }
 
   a {
@@ -79,6 +85,7 @@ const GlobalStyle = createGlobalStyle`
     color: inherit;
   }
 `;
+
 
 const client = new QueryClient();
 

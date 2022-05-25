@@ -26,7 +26,6 @@ const Logo = styled(motion.svg)`
   width: 95px;
   height: 25px;
   fill: ${(props) => props.theme.red};
-
   path {
     stroke-width: 6px;
     stroke: white;
@@ -46,7 +45,6 @@ const Item = styled.li`
   display: flex;
   justify-content: center;
   flex-direction: column;
-
   &:hover {
     color: ${(props) => props.theme.white.lighter};
   }
@@ -57,7 +55,6 @@ const Search = styled.form`
   display: flex;
   align-items: center;
   position: relative;
-
   svg {
     height: 25px;
   }
@@ -67,7 +64,7 @@ const Circle = styled(motion.span)`
   position: absolute;
   width: 5px;
   height: 5px;
-  border-radius: 5px;
+  border-radius: 2.5px;
   bottom: -5px;
   left: 0;
   right: 0;
@@ -79,8 +76,7 @@ const Input = styled(motion.input)`
   transform-origin: right center;
   position: absolute;
   right: 0px;
-  padding: 5px 10px;
-  padding-left: 40px;
+  padding: 5px 10px 5px 40px;
   z-index: -1;
   color: white;
   font-size: 16px;
@@ -139,12 +135,10 @@ function Header() {
             }
         });
     }, [scrollY, navAnimation]);
-
-    const navigate = useNavigate();
+    const history = useNavigate();
     const {register, handleSubmit} = useForm<IForm>();
     const onValid = (data: IForm) => {
-        console.log(data);
-        navigate(`/search?keyword=${data.keyword}`);
+        history(`/search?keyword=${data.keyword}`);
     };
     return (
         <Nav variants={navVariants} animate={navAnimation} initial={"top"}>
@@ -175,12 +169,10 @@ function Header() {
                 </Items>
             </Col>
             <Col>
-                <Search
-                    onSubmit={handleSubmit(onValid)}
-                >
+                <Search onSubmit={handleSubmit(onValid)}>
                     <motion.svg
                         onClick={toggleSearch}
-                        animate={{x: searchOpen ? -185 : 0}}
+                        animate={{x: searchOpen ? -215 : 0}}
                         transition={{type: "linear"}}
                         fill="currentColor"
                         viewBox="0 0 20 20"

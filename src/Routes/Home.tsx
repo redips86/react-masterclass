@@ -8,6 +8,7 @@ import {useMatch, useNavigate} from "react-router-dom";
 
 const Wrapper = styled.div`
   background: black;
+  padding-bottom: 200px;
 `;
 
 const Loader = styled.div`
@@ -30,7 +31,6 @@ const Banner = styled.div<{ bgphoto: string }>`
 const Title = styled.h2`
   font-size: 68px;
   margin-bottom: 20px;
-
 `;
 
 const Overview = styled.p`
@@ -114,19 +114,18 @@ const BigCover = styled.div`
 `;
 
 const BigTitle = styled.h3`
-  color: ${props => props.theme.white.lighter};
+  color: ${(props) => props.theme.white.lighter};
   padding: 20px;
-  font-size: 28px;
+  font-size: 46px;
   position: relative;
   top: -80px;
 `;
 
 const BigOverview = styled.p`
+  padding: 20px;
   position: relative;
   top: -80px;
-  padding: 20px;
-  color: ${props => props.theme.white.lighter};
-
+  color: ${(props) => props.theme.white.lighter};
 `;
 
 const rowVariants = {
