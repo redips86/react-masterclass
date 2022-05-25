@@ -2,7 +2,7 @@ import {useQuery} from "react-query";
 import {getMovies, IGetMoviesResult} from "../api";
 import styled from "styled-components";
 import {makeImagePath} from "../utils";
-import {AnimatePresence, motion} from "framer-motion";
+import {AnimatePresence, motion, MotionValue, useViewportScroll} from "framer-motion";
 import {useState} from "react";
 import {useMatch, useNavigate} from "react-router-dom";
 
@@ -83,6 +83,26 @@ const Info = styled(motion.div)`
   }
 `;
 
+const Overlay = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+
+`;
+
+const BigMovie = styled(motion.div)<{ scroll: MotionValue<number> }>`
+  position: absolute;
+  width: 40vw;
+  height: 80vh;
+  top: ${prop => prop.scroll.get() + 50}px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+`
+
 const rowVariants = {
     hidden: {
         x: window.outerWidth,
@@ -127,8 +147,11 @@ const infoVariants = {
 const offset = 6;
 
 function Home() {
+
     const navigate = useNavigate();
     const bigMovieMatch = useMatch("/movies/:movieId");
+    const {scrollY} = useViewportScroll();
+    // const setScrollY = useTransform(scrollY, (value) => value + 50);
 
     const {data, isLoading} = useQuery<IGetMoviesResult>(["movies", "nowPlaying"], getMovies);
     const [index, setIndex] = useState(0);
@@ -148,6 +171,9 @@ function Home() {
     const toggleLeaving = () => setLeaving(prev => !prev);
     const onBoxClicked = (movieId: number) => {
         navigate(`/movies/${movieId}`)
+    }
+    const onOverlayClick = () => {
+        navigate('/');
     }
 
     return (
@@ -194,18 +220,19 @@ function Home() {
                 <AnimatePresence>
                     {
                         bigMovieMatch ?
-                            <motion.div
-                                layoutId={bigMovieMatch.params.movieId}
-                                style={{
-                                    position: "absolute",
-                                    width: "40vw",
-                                    height: "80vh",
-                                    backgroundColor: "red",
-                                    top: 50,
-                                    left: 0,
-                                    right: 50,
-                                    margin: "0 auto",
-                                }}></motion.div> : null
+                            <>
+                                <Overlay
+                                    onClick={onOverlayClick}
+                                    animate={{opacity: 1}}
+                                    exit={{opacity: 0}}
+                                ></Overlay>
+                                <BigMovie
+                                    layoutId={bigMovieMatch.params.movieId}
+                                    scroll={scrollY}
+                                ></BigMovie>
+                            </>
+                            : null
+
                     }
                 </AnimatePresence>
             </>}
