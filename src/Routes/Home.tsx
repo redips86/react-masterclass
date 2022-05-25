@@ -4,6 +4,7 @@ import styled from "styled-components";
 import {makeImagePath} from "../utils";
 import {AnimatePresence, motion} from "framer-motion";
 import {useState} from "react";
+import {useMatch, useNavigate} from "react-router-dom";
 
 const Wrapper = styled.div`
   background: black;
@@ -16,13 +17,13 @@ const Loader = styled.div`
   align-items: center;
 `;
 
-const Banner = styled.div<{ bgPhoto: string }>`
+const Banner = styled.div<{ bgphoto: string }>`
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 60px;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${props => props.bgPhoto});
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${props => props.bgphoto});
   background-size: cover;
 `;
 
@@ -50,13 +51,14 @@ const Row = styled(motion.div)`
   width: 100%;
 `;
 
-const Box = styled(motion.div)<{ bgPhoto: string; }>`
+const Box = styled(motion.div)<{ bgphoto: string; }>`
   background-color: white;
-  background-image: url(${props => props.bgPhoto});
+  background-image: url(${props => props.bgphoto});
   background-size: cover;
   background-position: center;
   height: 200px;
   font-size: 66px;
+  cursor: pointer;
 
   &:first-child {
     transform-origin: center left;
@@ -125,6 +127,9 @@ const infoVariants = {
 const offset = 6;
 
 function Home() {
+    const navigate = useNavigate();
+    const bigMovieMatch = useMatch("/movies/:movieId");
+
     const {data, isLoading} = useQuery<IGetMoviesResult>(["movies", "nowPlaying"], getMovies);
     const [index, setIndex] = useState(0);
     const increaseIndex = () => {
@@ -141,13 +146,16 @@ function Home() {
     }
     const [leaving, setLeaving] = useState(false);
     const toggleLeaving = () => setLeaving(prev => !prev);
+    const onBoxClicked = (movieId: number) => {
+        navigate(`/movies/${movieId}`)
+    }
 
     return (
         <Wrapper style={{height: "200vh"}}>
             {isLoading ? <Loader></Loader> : <>
                 <Banner
                     onClick={increaseIndex}
-                    bgPhoto={makeImagePath(data?.results[0].backdrop_path || "")}>
+                    bgphoto={makeImagePath(data?.results[0].backdrop_path || "")}>
                     <Title>{data?.results[0].title}</Title>
                     <Overview>{data?.results[0].overview}</Overview>
                 </Banner>
@@ -166,11 +174,13 @@ function Home() {
                                     .slice(offset * index, offset * index + offset)
                                     .map(movie =>
                                         <Box
+                                            layoutId={movie.id + ""}
+                                            onClick={() => onBoxClicked(movie.id)}
                                             variants={boxVariants}
                                             initial={"normal"}
                                             key={movie.id}
                                             whileHover={"hover"}
-                                            bgPhoto={makeImagePath(movie.backdrop_path, "w500")}
+                                            bgphoto={makeImagePath(movie.backdrop_path, "w500")}
                                         >
 
                                             <Info variants={infoVariants}>
@@ -181,6 +191,23 @@ function Home() {
                         </Row>
                     </AnimatePresence>
                 </Slider>
+                <AnimatePresence>
+                    {
+                        bigMovieMatch ?
+                            <motion.div
+                                layoutId={bigMovieMatch.params.movieId}
+                                style={{
+                                    position: "absolute",
+                                    width: "40vw",
+                                    height: "80vh",
+                                    backgroundColor: "red",
+                                    top: 50,
+                                    left: 0,
+                                    right: 50,
+                                    margin: "0 auto",
+                                }}></motion.div> : null
+                    }
+                </AnimatePresence>
             </>}
         </Wrapper>);
 }
